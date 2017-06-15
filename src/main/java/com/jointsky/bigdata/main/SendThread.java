@@ -2,8 +2,8 @@ package com.jointsky.bigdata.main;
 
 import com.jointsky.bigdata.api.EdpsKafkaService;
 import com.jointsky.bigdata.api.EdpsKafkaServiceImpl;
-import com.jointsky.bigdata.api.MessageData;
 import com.jointsky.bigdata.util.LoadFileUtil;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.io.File;
 import java.util.List;
@@ -26,7 +26,7 @@ public class SendThread extends Thread {
         if (files.size() != 0) {
             try {
                 kafkaService.establishConnect();
-                List<MessageData> messageList = loadFileUtil.getFileContent(topic, files.get(0));      //仅取文件列表中最旧的文件中的消息进行发送
+                List<ProducerRecord> messageList = loadFileUtil.getFileContent(topic, files.get(0));      //仅取文件列表中最旧的文件中的消息进行发送
                 kafkaService.send(messageList);
 
 
@@ -35,7 +35,7 @@ public class SendThread extends Thread {
             }
 
             files.get(0).delete();           //传输完成后删除文件
-            kafkaService.closeConnect();
+            kafkaService.closeConnect();      //关闭此producer
         }
 
     }

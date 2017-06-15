@@ -1,14 +1,5 @@
 package com.jointsky.bigdata.main;
 
-import com.jointsky.bigdata.api.EdpsKafkaService;
-import com.jointsky.bigdata.api.EdpsKafkaServiceImpl;
-import com.jointsky.bigdata.api.MessageData;
-import com.jointsky.bigdata.util.LoadFileUtil;
-import com.jointsky.bigdata.util.PropertiesLoader;
-
-import java.io.File;
-import java.util.List;
-
 /**
  * Created by LiuZifan on 2017/5/17.
  */

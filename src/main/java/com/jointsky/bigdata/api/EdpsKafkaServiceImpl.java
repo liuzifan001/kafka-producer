@@ -11,21 +11,14 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * 发送消息至kafka集群
+ * 发送消息至kafka集群的封装类
  * Created by on 2017/5/16.
  */
 public class EdpsKafkaServiceImpl implements EdpsKafkaService {
     private Logger logger = LoggerFactory.getLogger(EdpsKafkaServiceImpl.class);
     private KafkaProducer producer = null;
     private static PropertiesLoader loader = new PropertiesLoader("kafka.properties");
-/*
-    private EdpsKafkaServiceImpl() {
 
-    }
-    public static EdpsKafkaServiceImpl getInstance(){
-        return instance;
-    }
-*/
 
     @Override
     public void establishConnect() throws Exception {
@@ -38,20 +31,19 @@ public class EdpsKafkaServiceImpl implements EdpsKafkaService {
         producerProps.setProperty("producer.type", loader.getProperty("producer.type"));
         producerProps.setProperty("key.serializer", loader.getProperty("key.serializer"));
         producerProps.setProperty("value.serializer", loader.getProperty("value.serializer"));
+        producerProps.setProperty("partitioner.class", loader.getProperty("partitioner.class"));
         producer = new KafkaProducer(producerProps);
     }
 
     @Override
-    public void send(MessageData messageData) throws Exception {
-        String topic = messageData.getTopic();
-        String messageStr = messageData.getData();
-        producer.send(new ProducerRecord<String,String>(topic,messageStr));
+    public void send(ProducerRecord producerRecord) throws Exception {
+        producer.send(producerRecord);
     }
 
     @Override
-    public void send(List<MessageData> messageDataList) throws Exception {
-        for (MessageData messageData : messageDataList) {
-            send(messageData);
+    public void send(List<ProducerRecord> producerRecordList) throws Exception {
+        for (ProducerRecord producerRecord : producerRecordList) {
+            send(producerRecord);
         }
     }
 

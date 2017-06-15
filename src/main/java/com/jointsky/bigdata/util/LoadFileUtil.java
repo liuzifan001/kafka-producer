@@ -1,6 +1,7 @@
 package com.jointsky.bigdata.util;
 
-import com.jointsky.bigdata.api.MessageData;
+import org.apache.kafka.clients.producer.ProducerRecord;
+
 import java.io.File;
 import java.util.*;
 
@@ -49,21 +50,18 @@ public class LoadFileUtil {
      *  将消息文件内容按行封装为List<MessageData>
      * @param topic 消息主题
      * @param file 文件
-     * @return 文件内容的MessageData列表
+     * @return 返回基于文件内容的消息List
      */
-    public List<MessageData> getFileContent(String topic, File file) throws Exception {
+    public List<ProducerRecord> getFileContent(String topic, File file) throws Exception {
         Scanner sc = new Scanner(file);
-        List<MessageData> messageDataList = new ArrayList<>();
+        List<ProducerRecord> producerRecordList = new ArrayList<>();
         while (sc.hasNextLine()){
-            MessageData messageData = new MessageData();
-            messageData.setTopic(topic);
-            messageData.setData(sc.nextLine());
-            messageDataList.add(messageData);
+            String data = sc.nextLine();
+            ProducerRecord<String,String> producerRecord = new ProducerRecord<String, String>(topic,null,data);    //封装消息
+            producerRecordList.add(producerRecord);
         }
         sc.close();
-        return messageDataList;
+        return producerRecordList;
     }
-
-
 
 }
