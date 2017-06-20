@@ -1,7 +1,16 @@
 package com.jointsky.bigdata.util;
 
-import kafka.producer.Partitioner;
 
+
+import org.apache.kafka.clients.producer.Partitioner;
+import org.apache.kafka.common.Cluster;
+import org.apache.kafka.common.PartitionInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -9,21 +18,37 @@ import java.util.Random;
  * Created by LiuZifan on 2017/6/15.
  */
 public class ProducerPartitioner implements Partitioner {
-
-
+    private static Logger LOG = LoggerFactory.getLogger(ProducerPartitioner.class);
     @Override
-    public int partition(Object key, int numPartitions) {
-        System.out.print("partitions number is "+numPartitions+"   ");
+    public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
+        // TODO Auto-generated method stub
+        List<PartitionInfo> partitions = cluster.partitionsForTopic(topic);
+        int numPartitions = partitions.size();
         if (key == null) {
             Random random = new Random();
             System.out.println("key is null ");
+            LOG.info("the message sendTo topic:" + topic + " and the partitionNum:" + random.nextInt(numPartitions));
             return random.nextInt(numPartitions);
         }
         else {
-            int result = Math.abs(key.hashCode())%numPartitions; //很奇怪，
-            //hashCode 会生成负数，所以加绝对值
-            System.out.println("key is "+ key+ " partitions is "+ result);
-            return result;
+            int partitionNum = 0;
+            try {
+                partitionNum = Integer.parseInt((String) key);
+            } catch (Exception e) {
+                partitionNum = key.hashCode();
+            }
+            LOG.info("the message sendTo topic:" + topic + " and the partitionNum:" + Math.abs(partitionNum % numPartitions));
+            return Math.abs(partitionNum % numPartitions);
         }
+    }
+
+    @Override
+    public void close() {
+
+    }
+
+    @Override
+    public void configure(Map<String, ?> map) {
+
     }
 }

@@ -57,7 +57,7 @@ public class LoadFileUtil {
         List<ProducerRecord> producerRecordList = new ArrayList<>();
         while (sc.hasNextLine()){
             String data = sc.nextLine();
-            ProducerRecord<String,String> producerRecord = new ProducerRecord<String, String>(topic,null,data);    //封装消息
+            ProducerRecord<String,String> producerRecord = new ProducerRecord<String, String>(topic,null,data);    //封装消息，key暂时设置为null
             producerRecordList.add(producerRecord);
         }
         sc.close();

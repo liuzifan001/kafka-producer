@@ -31,7 +31,7 @@ public class EdpsKafkaServiceImpl implements EdpsKafkaService {
         producerProps.setProperty("producer.type", loader.getProperty("producer.type"));
         producerProps.setProperty("key.serializer", loader.getProperty("key.serializer"));
         producerProps.setProperty("value.serializer", loader.getProperty("value.serializer"));
-        producerProps.setProperty("partitioner.class", loader.getProperty("partitioner.class"));
+        producerProps.setProperty("partitioner.class", loader.getProperty("partitioner.class"));     //使用自定义分区分配函数
         producer = new KafkaProducer(producerProps);
     }
 

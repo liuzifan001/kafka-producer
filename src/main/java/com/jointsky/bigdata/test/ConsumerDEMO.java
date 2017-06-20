@@ -34,7 +34,7 @@ public class ConsumerDEMO {
         consumerProps.setProperty("group.id","test");
 
         KafkaConsumer consumer = new KafkaConsumer<>(consumerProps);
-        consumer.subscribe(Arrays.asList("TestOffset"));
+        consumer.subscribe(Arrays.asList("gas_realtimedata"));
         List<ConsumerRecord<String, String>> buffer = new ArrayList<>();
         final int minBatchSize = 20;
 
@@ -46,14 +46,16 @@ public class ConsumerDEMO {
             }
             if (buffer.size() >= minBatchSize) {
                 for (ConsumerRecord<String,String> record: buffer) {
-                    System.out.printf("offset = %d, key = %s, value = %s ", record.offset(), record.key(), record.value() + "\n");
+                    System.out.printf("partition = %d offset = %d, key = %s, value = %s ", record.partition(), record.offset(), record.key(), record.value() + "\n");
                     Thread.sleep(100);
                 }
+
                 consumer.commitSync();    //手动提交
                 System.out.println("AutoCommit!");
                 buffer.clear();
             }
         }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }finally {

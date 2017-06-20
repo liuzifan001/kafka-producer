@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class SendThread extends Thread {
     private String topic;
-    private static LoadFileUtil loadFileUtil = new LoadFileUtil();
+    private  LoadFileUtil loadFileUtil = new LoadFileUtil();
 
     public SendThread (String topic){
         this.topic = topic;
