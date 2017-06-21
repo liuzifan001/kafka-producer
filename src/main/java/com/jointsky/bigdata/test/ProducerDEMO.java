@@ -14,7 +14,7 @@ public class ProducerDEMO {
         EdpsKafkaService edps = new EdpsKafkaServiceImpl();
         try {
             edps.establishConnect();
-            String topic = "Teat619";
+            String topic = "Test620";
           //  TopicUtil.createTopic(topic,4,1);     //创建4个分区的topic
 
 
@@ -24,7 +24,7 @@ public class ProducerDEMO {
                 ProducerRecord<String,String> record = new ProducerRecord<String, String>(topic,null,str);
                 edps.send(record);
                 System.out.println("已发送: " + str );
-                Thread.sleep(500);
+                Thread.sleep(20);
             }
 
             edps.closeConnect();

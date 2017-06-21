@@ -7,7 +7,6 @@ package com.jointsky.bigdata.main;
 public class sendToKafka {
 
     public static void main(String[] args) {
-        while (true) {
             Thread gasRealTime = new SendThread("gas_realtimedata");
             Thread gasMinute = new SendThread("gas_minutedata");
             Thread gasDay = new SendThread("gas_daydata");
@@ -20,19 +19,14 @@ public class sendToKafka {
 
             gasRealTime.start();
             gasMinute.start();
-            gasHour.start();
+/*            gasHour.start();
             gasDay.start();
 
             waterRealTime.start();
             waterMinute.start();
             waterHour.start();
-            waterDay.start();
+            waterDay.start();*/
 
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
-}
+

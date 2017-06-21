@@ -22,20 +22,25 @@ public class SendThread extends Thread {
     @Override
     public void run() {
         EdpsKafkaService kafkaService = new EdpsKafkaServiceImpl();
-        List<File> files = loadFileUtil.getSortedFile(topic);                                 //获取主题对应文件列表
-        if (files.size() != 0) {
-            try {
-                kafkaService.establishConnect();
-                List<ProducerRecord> messageList = loadFileUtil.getFileContent(topic, files.get(0));      //仅取文件列表中最旧的文件中的消息进行发送
-                kafkaService.send(messageList);
+        try {
+            while (true) {
+                List<File> files = loadFileUtil.getSortedFile(topic);                                 //获取主题对应文件列表
+                if (files.size() != 0) {
+
+                    kafkaService.establishConnect();
+                    List<ProducerRecord> messageList = loadFileUtil.getFileContent(topic, files.get(0));      //仅取文件列表中最旧的文件中的消息进行发送
+                    kafkaService.send(messageList);
 
 
-            } catch (Exception e) {
-                e.printStackTrace();
+
+
+                    files.get(0).delete();           //传输完成后删除文件
+                }
             }
-
-            files.get(0).delete();           //传输完成后删除文件
-            kafkaService.closeConnect();      //关闭此producer
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            kafkaService.closeConnect();         //关闭连接
         }
 
     }
